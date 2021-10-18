@@ -12,10 +12,6 @@ from .. dependencies import get_current_user, get_session
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
-@router.get("/")
-async def auth_health_check():
-    return {"msg": "auth routers health check"}
-
 
 @router.post("/signup", response_model=UserRead)
 def signup(user: UserCreate, session: Session = Depends(get_session)):

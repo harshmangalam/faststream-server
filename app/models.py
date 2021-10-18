@@ -2,19 +2,20 @@ from typing import List, Optional
 
 from sqlmodel import SQLModel, Field,Relationship
 
+
 # user
 
 
 # base user schema
 
 
-class BaseUser(SQLModel):
+class UserBase(SQLModel):
     name:str
     email: str
 
 
 # user table in database
-class User(BaseUser, table=True):
+class User(UserBase, table=True):
     id: Optional[int] = Field(None, primary_key=True)
     password: str
     videos: List["Video"] = Relationship(back_populates="user")
@@ -22,14 +23,22 @@ class User(BaseUser, table=True):
 # user schema for signup input
 
 
-class UserCreate(BaseUser):
+class UserCreate(UserBase):
     password: str
 
 # user schea for response
 
 
-class UserRead(BaseUser):
+class UserRead(UserBase):
     id: Optional[int] = Field(None, primary_key=True)
+
+
+# user schema for update 
+
+class UserUpdate(SQLModel):
+    name:Optional[str] = None
+    email:Optional[str] = None
+    
 
 # user schema for login input
 

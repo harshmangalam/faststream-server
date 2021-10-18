@@ -37,4 +37,4 @@ def decode_jwt_token(token):
     return jwt.decode(token,SECRET_KEY,algorithms=ALGORITHM)
 
       
-        
+    

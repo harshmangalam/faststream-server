@@ -7,7 +7,6 @@ import uuid
 import os
 
 from ..models import Video, VideoRead, User, VideoReadWithUser
-from ..settings import HOST, PORT, STATIC_PATH
 from ..dependencies import get_current_user, get_session
 
 router = APIRouter(tags=["videos"], prefix="/videos")

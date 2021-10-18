@@ -4,6 +4,7 @@ import uvicorn
 
 from app.routers import auth as auth_router
 from app.routers import videos as videos_router
+from app.routers import users as users_router
 
 from app.settings import PORT, HOST
 
@@ -15,6 +16,7 @@ app.mount("/static",StaticFiles(directory="static"),name="static")
 
 app.include_router(auth_router.router)
 app.include_router(videos_router.router)
+app.include_router(users_router.router)
 
 @app.on_event("startup")
 def on_startup():
