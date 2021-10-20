@@ -50,11 +50,17 @@ def get_video_by_id(video_id: int, session: Session = Depends(get_session)):
 
 
 @router.get("/{video_id}/stream")
-async def stream_videos(video_id: int, session: Session = Depends(get_session)):
+def stream_video(video_id: int, session: Session = Depends(get_session)):
     video = session.get(Video, video_id)
     if video is None:
         raise HTTPException(status_code=404, detail="Video not found!")
+    
+    video.views += 1
+    session.add(video)
+    session.commit()
+    session.refresh(video)
     return FileResponse(f"static/{video.file_name}")
+    
 
 
 @router.patch("/{video_id}")
