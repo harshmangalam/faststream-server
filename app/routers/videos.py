@@ -118,3 +118,30 @@ def delete_video(video_id: int, curret_user_id: int = Depends(get_current_user),
     session.commit()
 
     return {"deleted": True}
+
+
+
+
+@router.post("/{video_id}/toggle_likes",response_model=VideoRead)
+def toggle_video_likes(video_id:int, curret_user_id: int = Depends(get_current_user), session: Session = Depends(get_session)):
+    user = session.get(User, curret_user_id)
+
+    if user is None:
+        raise HTTPException(status_code=404, detail="Account not found!")
+
+    video = session.get(Video, video_id)
+
+    if video is None:
+        raise HTTPException(status_code=404, detail="Video not found!")
+
+    
+    if user in video.user_likes:
+        video.user_likes.remove(user)
+    else:
+        video.user_likes.append(user)
+
+    session.add(video)
+    session.commit()
+    session.refresh(video)
+
+    return video

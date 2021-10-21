@@ -3,6 +3,12 @@ from typing import List, Optional
 from sqlmodel import SQLModel, Field,Relationship
 
 from datetime import datetime
+
+class UserVideoLikesLink(SQLModel,table=True):
+    user_id: Optional[int] = Field(None, primary_key=True,foreign_key="user.id")
+    video_id: Optional[int] = Field(None, primary_key=True,foreign_key="video.id")
+
+
 # user
 
 
@@ -19,7 +25,8 @@ class User(UserBase, table=True):
     id: Optional[int] = Field(None, primary_key=True)
     password: str
     videos: List["Video"] = Relationship(back_populates="user")
-    created_at:datetime = Field(default=datetime.utcnow)
+    created_at:datetime = Field(default=datetime.utcnow())
+    video_likes:List["Video"] = Relationship(back_populates="user_likes",link_model=UserVideoLikesLink)
 
 # user schema for signup input
 
@@ -66,7 +73,9 @@ class Video(VideoBase, table=True):
     user: Optional[User] = Relationship(back_populates="videos")
     user_id: Optional[int] = Field(default=None, foreign_key="user.id")
     views:int = Field(default=0)
-    created_at:datetime = Field(default=datetime.utcnow)
+    created_at:datetime = Field(default=datetime.utcnow())
+    user_likes:List["User"] = Relationship(back_populates="video_likes",link_model=UserVideoLikesLink)
+
 
     
 
@@ -83,6 +92,7 @@ class VideoRead(VideoBase):
 
 
 
+
 class UserReadWithVideos(UserRead):
     videos:List[VideoRead] = []
 
@@ -90,3 +100,7 @@ class UserReadWithVideos(UserRead):
 
 class VideoReadWithUser(VideoRead):
     user:UserRead = None
+
+
+
+
